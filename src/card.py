@@ -1,5 +1,4 @@
 """Карты No_Thanks."""
-from typing import Self
 
 
 class Card:
@@ -22,7 +21,6 @@ class Card:
 
     @staticmethod
     def load(text: str):
-
         """From '3' to Card(3)."""
         return Card(number=int(text))
 
@@ -31,15 +29,8 @@ class Card:
         if numbers is None:
             numbers = Card.NUMBERS
         # cards = []
-        # for col in colors:
-        #     for num in numbers:
-        #         cards.append(Card(color=col, number=num))
+        #for num in numbers:
+        #   cards.append(Card(number=num))
         cards = [Card(number=num) for num in numbers]
         return cards
-
-    def score(self):
-        """Штрафные очки за карты."""
-        return self.number
-
-
 
