@@ -40,7 +40,7 @@ def test_load():
 
 def test_validation():
     with pytest.raises(ValueError):
-        Card('h')
+        Card('l')
     with pytest.raises(ValueError):
         Card(1)
     with pytest.raises(ValueError):

@@ -21,7 +21,7 @@ class Card:
 
     @staticmethod
     def load(text: str):
-        """From '3' to Card(3)."""
+        """From '4' to Card(4)."""
         return Card(number=int(text))
 
     @staticmethod
