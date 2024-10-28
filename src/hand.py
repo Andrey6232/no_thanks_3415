@@ -37,8 +37,16 @@ class Hand:
         self.cards.remove(card)
 
     def score(self):
-        """Очки"""
-        res = 0
+        """Очки за карты"""
+        arr = []
         for c in self.cards:
-            res += c.score()
-        return res
+            arr.append(c.score())
+        arr.sort()
+        result = 0
+        i = 0
+        while i < len(arr):
+            result += arr[i]
+            i += 1
+            while i < len(arr) and arr[i] == arr[i - 1] + 1:
+                i += 1
+        return result

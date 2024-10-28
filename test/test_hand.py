@@ -19,12 +19,6 @@ def test_save():
 def test_load():
     d = Hand.load('3 10 7')
     expected_deck = Hand(cards)
-    # print()
-    # print(type(d), d)
-    # print(type(expected_deck), expected_deck)
-    # так можно сравнивать, если нет метода __eq__
-    assert str(d) == str(expected_deck)
-    # так можно сравнивать, если есть метод __eq__
     assert d == expected_deck
 
 def test_add_card():
@@ -42,9 +36,9 @@ def test_remove_card():
     assert repr(h) == '3 10 20 8'
 
 def test_score():
-    h = Hand.load('3 10 7')
-    print(h.score())
-    #assert h.score() == 10
-
-    #h = Hand.load('20 9')
-    #assert h.score() == 11
+    h = Hand.load('3 10 7 6 8')
+    assert h.score() == 19
+    h = Hand.load('20 9')
+    assert h.score() == 29
+    h = Hand.load('3 15 14 28 6 8 21 27 32')
+    assert h.score() == 111
