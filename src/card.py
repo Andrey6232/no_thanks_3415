@@ -21,7 +21,7 @@ class Card:
 
     @staticmethod
     def load(text: str):
-        """From '4' to Card(4)."""
+        """From '3' to Card(3)."""
         return Card(number=int(text))
 
     @staticmethod
@@ -33,4 +33,8 @@ class Card:
         #   cards.append(Card(number=num))
         cards = [Card(number=num) for num in numbers]
         return cards
+
+    def score(self):
+        """Номинал карты."""
+        return self.number
 

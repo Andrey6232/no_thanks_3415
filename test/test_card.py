@@ -40,7 +40,7 @@ def test_load():
 
 def test_validation():
     with pytest.raises(ValueError):
-        Card('l')
+        Card('h')
     with pytest.raises(ValueError):
         Card(1)
     with pytest.raises(ValueError):
@@ -60,3 +60,10 @@ def test_all_cards():
 
     cards = Card.all_cards()
     assert len(cards) == 33
+
+def test_score():
+    c = Card(7)
+    assert 7 == c.score()
+
+    c = Card(5)
+    assert 5 == c.score()
