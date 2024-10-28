@@ -1,30 +1,34 @@
 from src.card import Card
 from src.deck import Deck
 from src.game_state import GameState
+from src.hand import Hand
 from src.player import Player
 
 data = {
-    'top': '7',
-    'current_player_index': 1,
-    'deck': '20 6 10',
-    'players': [
-        {
-            'name': 'Alex',
-            'hand': '3 6',
-            'score': 5
-        },
-        {
-            'name': 'Bob',
-            'hand': '5',
-            'score': 1
-        },
-        {
-            'name': 'Charley',
-            'hand': '7 10 20',
-            'score': 3
+            'top': '7',
+            'current_player_index': 1,
+            'deck': '20 6 10',
+            'players': [
+                {
+                    'name': 'Alex',
+                    'hand': '3 8',
+                    'score': 11,
+                    'chips': 7
+                },
+                {
+                    'name': 'Bob',
+                    'hand': '5',
+                    'score': 5,
+                    'chips': 1
+                },
+                {
+                    'name': 'Charley',
+                    'hand': '9 11 21',
+                    'score': 41,
+                    'chips': 4
+                }
+            ]
         }
-    ]
-}
 
 alex = Player.load(data['players'][0])
 bob = Player.load(data['players'][1])
@@ -57,7 +61,6 @@ def test_eq():
     players = [alex, bob, charley]
     game1 = GameState(players=players, deck=full_deck, top=Card.load('7'))
     game2 = GameState(players=players.copy(), deck=full_deck, top=Card.load('7'))
-    # надо бы еще game с отличающимися на 1 другой параметр и всеми отличающимися
     game3 = GameState(players=players, deck=Deck.load('20 6 10'), top=Card.load('7'))
     game4 = GameState(players=players, deck=Deck.load('20 6 10'), top=Card.load('8'))
     assert game1 == game2
@@ -100,13 +103,34 @@ def test_draw_card():
     assert game.current_player().hand == '5 10'
 
 
+def test_take_card():
+    game = GameState.load(data)
+    chips = game.current_player().chips
+    game.take_card()
+    assert game.current_player().hand == Hand.load('5 7')
+    assert game.current_player().chips == game.chips + chips
+
+    game.next_player()
+    chips = game.current_player().chips
+    game.take_card()
+    assert game.current_player().hand == Hand.load('9 11 21 7')
+    assert game.current_player().chips == game.chips + chips
+
+
 def test_play_card():
     players = [alex, bob, charley]
-    game = GameState(players=players, deck=full_deck, top=Card.load('7'), current_player=2)
+    game = GameState(players=players, deck=full_deck, top=Card.load('7'), current_player=2, chips=4)
 
-    assert game.current_player().hand == '7 10 20'
+    assert game.current_player().hand == '9 11 21'
     assert game.top == Card.load('7')
+    assert game.chips == 4
 
-    game.play_card(Card.load('10'))
-    assert game.current_player().hand == '7 20'
-    assert game.top == Card.load('10')
+    game.play_card(Card.load('11'))
+    assert game.current_player().hand == '9 21'
+    assert game.top == Card.load('11')
+    assert game.chips == 4
+
+def test_score_players():
+    players = [alex, bob, charley]
+    game = GameState(players=players, deck=full_deck, top=Card.load('7'), current_player=0, chips=4)
+    assert game.score_players() == {'Alex': 4, 'Bob': 4, 'Charley': 37}

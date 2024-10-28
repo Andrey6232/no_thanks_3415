@@ -6,18 +6,17 @@ from src.player import Player
 
 
 class GameState:
-    def __init__(self, players: list[Player], deck: Deck, top: Card, current_player: int = 0):
+    def __init__(self, players: list[Player], deck: Deck, top: Card, current_player: int = 0, chips: int = 0):
         self.players: list[Player] = players
         self.deck: Deck = deck
         self.top: Card = top
+        self.chips = chips
         self._current_player: int = current_player
 
     def current_player(self) -> Player:
         return self.players[self._current_player]
 
     def __eq__(self, other):
-        # return self.players == other.players and self.deck == other.deck and self.top == other.top and \
-        #         self._current_player == other._current_player
         if self.players != other.players:
             return False
         if self.deck != other.deck:
@@ -41,23 +40,27 @@ class GameState:
         '''
         data = {
             'top': '7',
+            'chips': 12
             'current_player_index': 1,
             'deck': '20 6 10',
             'players': [
                 {
                     'name': 'Alex',
-                    'hand': '3 6',
-                    'score': 5
+                    'hand': '3 8',
+                    'score': 5,
+                    'chips': 7
                 },
                 {
                     'name': 'Bob',
                     'hand': '5',
-                    'score': 1
+                    'score': 1,
+                    'chips': 1
                 },
                 {
                     'name': 'Charley',
-                    'hand': '7 10 20',
-                    'score': 3
+                    'hand': '9 11 21',
+                    'score': 3,
+                    'chips': 4
                 }
             ]
         }
@@ -80,7 +83,22 @@ class GameState:
         card = self.deck.draw_card()
         self.current_player().hand.add_card(card)
 
+    def take_card(self):
+        """Взять карту и фишки."""
+        self.current_player().hand.add_card(self.top)
+        self.current_player().chips += self.chips
+
+    def to_pay(self):
+        """Заплатить фишкой."""
+        self.current_player().chips -= 1
+        self.chips +=1
+
     def play_card(self, card: Card):
         """Карта card от текущего игрока переходит в top."""
         self.current_player().hand.remove_card(card)
         self.top = card
+
+    def score_players(self):
+        """Очки игроков"""
+        return {p.name: p.score-p.chips for p in self.players}
+
