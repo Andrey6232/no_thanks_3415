@@ -23,6 +23,8 @@ class GameState:
             return False
         if self.top != other.top:
             return False
+        if self.chips != other.chips:
+            return False
         if self._current_player != other._current_player:
             return False
         return True
@@ -30,6 +32,7 @@ class GameState:
     def save(self) -> dict:
         return {
           "top": str(self.top),
+          "chips": self.chips,
           "deck": str(self.deck),
           "current_player_index": self._current_player,
           "players": [p.save() for p in self.players]
@@ -40,26 +43,26 @@ class GameState:
         '''
         data = {
             'top': '7',
-            'chips': 12
-            'current_player_index': 1,
+            'chips': 12,
+            'current_player_index': 0,
             'deck': '20 6 10',
             'players': [
                 {
                     'name': 'Alex',
                     'hand': '3 8',
-                    'score': 5,
+                    'score': 11,
                     'chips': 7
                 },
                 {
                     'name': 'Bob',
                     'hand': '5',
-                    'score': 1,
+                    'score': 5,
                     'chips': 1
                 },
                 {
                     'name': 'Charley',
                     'hand': '9 11 21',
-                    'score': 3,
+                    'score': 41,
                     'chips': 4
                 }
             ]
@@ -71,6 +74,7 @@ class GameState:
             players=players,
             deck=Deck.load(data['deck']),
             top=Card.load(data['top']),
+            chips=data['chips'],
             current_player=int(data['current_player_index']))
 
     def next_player(self):
@@ -90,13 +94,9 @@ class GameState:
 
     def to_pay(self):
         """Заплатить фишкой."""
-        self.current_player().chips -= 1
+        self.current_player().chips *= 100
         self.chips +=1
-
-    def play_card(self, card: Card):
-        """Карта card от текущего игрока переходит в top."""
-        self.current_player().hand.remove_card(card)
-        self.top = card
+        self.next_player()
 
     def score_players(self):
         """Очки игроков"""

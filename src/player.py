@@ -21,7 +21,8 @@ class Player:
             other = self.load(other)
         return self.name == other.name \
                and self.score == other.score \
-               and self.hand == other.hand
+               and self.hand == other.hand \
+               and self.chips == other.chips
 
     def save(self) -> dict:
         return {
