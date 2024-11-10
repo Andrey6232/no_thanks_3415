@@ -121,20 +121,17 @@ def test_take_card():
 
 def test_to_pay():
     game = GameState.load(data)
+    assert game.current_player().chips == 7
+    assert game.chips == 12
     game.to_pay()
-    assert game.current_player().chips == 1 # 7-1
+    assert game.current_player().chips == 1
     assert game.chips == 13
-    '''game.to_pay()
-    print(game.current_player().chips+1)
-    assert game.current_player().chips == 0
+    game.to_pay()
+    assert game.current_player().chips == 4
     assert game.chips == 14
     game.to_pay()
-    print(game.current_player().chips+1)
-    assert game.current_player().chips == 3
+    assert game.current_player().chips == 6
     assert game.chips == 15
-    game.to_pay()
-    assert game.current_player().chips == 5 
-    assert game.chips == 16'''
 
 
 def test_score_players():

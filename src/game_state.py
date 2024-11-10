@@ -94,11 +94,10 @@ class GameState:
 
     def to_pay(self):
         """Заплатить фишкой."""
-        self.current_player().chips *= 100
+        self.current_player().chips -= 1
         self.chips +=1
         self.next_player()
 
     def score_players(self):
         """Очки игроков"""
         return {p.name: p.score-p.chips for p in self.players}
-
