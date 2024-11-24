@@ -24,6 +24,9 @@ class Player:
                and self.hand == other.hand \
                and self.chips == other.chips
 
+    def __hash__(self):
+        return hash(self.name)
+
     def save(self) -> dict:
         return {
             'name': self.name,
