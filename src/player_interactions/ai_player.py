@@ -8,19 +8,4 @@ class Bot(PlayerInteraction):
     def choose_action(cls, player: Player):
         if player.chips > 0:
             return random.choice(['Take card', 'Spend'])
-        else:
-            return 'Take card'
-
-    @classmethod
-    def inform_card_take(cls, player: Player):
-        """
-        Сообщает, что игрок взял карту
-        """
-        pass
-
-    @classmethod
-    def inform_card_to_pay(cls, player: Player):
-        """
-        Сообщает, что игрок использовал фишку
-        """
-        pass
+        return 'Take card'
