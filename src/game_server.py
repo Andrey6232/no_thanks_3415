@@ -29,7 +29,7 @@ class GameServer:
     @classmethod
     def load_game(cls):
         # TODO: выбрать имя файла
-        filename = 'uno.json'
+        filename = 'no_thanks.json'
         with open(filename, 'r') as fin:
             data = json.load(fin)
             game_state = GameState.load(data)
@@ -68,7 +68,8 @@ class GameServer:
 
     @classmethod
     def new_game(cls, player_types: dict):
-        deck = Deck(None).shuffle()
+        deck = Deck(None)
+        deck.shuffle()
         for _ in range(9):
             deck.draw_card()
 
@@ -92,30 +93,34 @@ class GameServer:
 
     def declare_winner_phase(self) -> GamePhase:
         score = self.game_state.score_players()
+        print('Players points:')
+        for key, value in score.items():
+            print(f"{key}: {value}")
         winner = min(score, key=lambda k: score[k])
-        print(f"{winner, score[winner]} is the winner!")
+        print(f"{winner}({score[winner]}) is winner")
         return GamePhase.GAME_END
 
     def start_bidding_phase(self):
         if self.game_state.deck == Deck([]):
             return GamePhase.DECLARE_WINNER
-        self.game_state.card = self.game_state.deck.draw_card()
-        self.game_state.score = 0
-        print('Top:', {"card": self.game_state.card, "score": self.game_state.score})
+        self.game_state.top = self.game_state.deck.draw_card()
+        self.game_state.chips = 0
         return GamePhase.BIDDING
 
     def bidding_phase(self):
+        print('Top:', {'card': self.game_state.top, 'chips': self.game_state.chips})
         current_player = self.game_state.current_player()
-        interaction = self.player_types[current_player.name]
-        choose = interaction.choose_action(current_player, self.game_state.chips)
+        interaction = self.player_types[current_player]
+        choose = interaction.choose_action(current_player)
         if choose == 'Take card':
             self.game_state.take_card()
-            interaction.inform_card_take(current_player)
+            #interaction.inform_card_take(current_player)
+            print(current_player)
             return GamePhase.START_BIDDING
         elif choose == 'Spend':
             self.game_state.to_pay()
-            interaction.inform_player_spend(current_player)
-            self.game_state.next_player()
+            #interaction.inform_player_spend(current_player)
+            print(current_player)
             return GamePhase.BIDDING
 
     def inform_all(self, method: str, *args, **kwargs):

@@ -6,7 +6,11 @@ from src.player import Player
 
 
 class GameState:
-    def __init__(self, players: list[Player], deck: Deck, top: Card, current_player: int = 0, chips: int = 0):
+    def __init__(self, players: list[Player],
+                 deck: Deck,
+                 top: Card,
+                 current_player: int = 0,
+                 chips: int = 0):
         self.players: list[Player] = players
         self.deck: Deck = deck
         self.top: Card = top
@@ -100,4 +104,4 @@ class GameState:
 
     def score_players(self):
         """Очки игроков"""
-        return {p.name: p.score-p.chips for p in self.players}
+        return {p.name: p.hand.score()-p.chips for p in self.players}

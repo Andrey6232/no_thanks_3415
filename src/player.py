@@ -5,7 +5,7 @@ from src.hand import Hand
 
 
 class Player:
-    def __init__(self, name: str, hand: Hand, score: int = 0, chips: int = 0):
+    def __init__(self, name: str, hand: Hand, score: int = 0, chips: int = 11):
         self.name = name
         self.hand = hand
         self.score = score
